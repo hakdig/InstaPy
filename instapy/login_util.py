@@ -234,8 +234,7 @@ def login_user(
     assert username, "Username not provided"
     assert password, "Password not provided"
 
-    # Hotfix - this check crashes more often than not -- plus in not necessary,
-    # I can verify my own connection
+    # Hotfix - this check crashes more often than not -- plus in not necessary, I can verify my own connection
     if want_check_browser:
         if not check_browser(browser, logfolder, logger, proxy_address):
             return False
@@ -272,6 +271,15 @@ def login_user(
         print(
             "Issue with cookie for user {}. Creating " "new cookie...".format(username)
         )
+
+    #Check if Cookie PopUp is visible
+    try:
+        cookie_elem = browser.find_element_by_xpath("//button[text()='Accept']")
+    except:
+        cookie_elem = None
+
+    if cookie_elem is not None:
+        cookie_elem.click()
 
     # Check if the first div is 'Create an Account' or 'Log In'
     try:
